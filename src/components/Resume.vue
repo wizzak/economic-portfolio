@@ -12,8 +12,8 @@
             <li>3 station</li>
           </ul>
         </div>
-      </div>
     </div>
+      </div>
     <div class="resume-col-wrapper">
       <div id="resume-col-2" class="resume-col">
         <div class="resume-col-heading">
