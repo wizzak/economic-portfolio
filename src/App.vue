@@ -49,8 +49,8 @@ body {
   }
 }
 footer {
+  margin-top: 100px;
   color: #fff;
-  position: absolute;
   bottom: 10px;
   right: 30px;
   .footer-menu {

@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 <template>
   <div id="projects-wrapper">
     <div id="projects-headline">
@@ -5,36 +6,35 @@
       <p>Eine Auswahl meiner Projekte an denen ich mitgearbeite habe.</p>
     </div>
     <div id="projects-items">
-      <div class="projects-row">
-        <div class="projects-item">
-          <div class="projects-image-wrapper">
-            <img src="../assets/images/stock/project_1.png" alt="project_1" />
-          </div>
-          <span class="projects-name">Partizipationstool</span>
-          <span class="projects-customer">Landkreis Birkenfeld</span>
+      <div class="projects-item" v-for="(value, name) in projects">
+        <div class="projects-image-wrapper">
+          <img v-bind:src="value.url" alt="project_1" />
         </div>
-        <div class="projects-item">
-          <div class="projects-image-wrapper">
-            <img src="../assets/images/stock/project_2.png" alt="project_1" />
-            <span class="projects-name">Buchungsassassitent</span>
-            <span class="projects-customer">Sparkasse Rhein-Nahe</span>
-          </div>
-        </div>
+        <span class="projects-name">{{value.name}}</span>
+        <span class="projects-customer">{{value.customer}}</span>
       </div>
-      <div class="projects-row">
-        <div class="projects-item">
-          <div class="projects-image-wrapper">
-            <img src="../assets/images/stock/project_3.png" alt="project_1" />
+    </div>
+    <div class="projects-slider-wrapper">
+      <div class="projects-slider">
+        <div class="slider-arrows">
+          <div class="slider-arrow-up">
+            <img src="..\assets\icons\angle-up-light.svg" alt="angle-up" />
           </div>
-          <span class="projects-name">Fililafinder</span>
-          <span class="projects-customer">Bäckerei Gillen</span>
+          <div class="slider-arrow-down">
+            <img src="..\assets\icons\angle-down-light.svg" alt="angle-down" />
+          </div>
         </div>
-        <div class="projects-item">
-          <div class="projects-image-wrapper">
-            <img src="../assets/images/stock/project_4.png" alt="project_1" />
+        <div class="projects-slider-items">
+          <div
+            class="projects-slider-item-wrapper"
+            :style="{'background-image': 'url(' + value.url + ')'}"
+            v-for="(value, name) in projects"
+          >
+            <div class="projects-slider-content">
+              <h2>{{value.name}}</h2>
+              <p>{{value.customer}}</p>
+            </div>
           </div>
-          <span class="projects-name">Steuerberater Seite</span>
-          <span class="projects-customer">Steuerberater Daniel Heeb</span>
         </div>
       </div>
     </div>
@@ -44,8 +44,38 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 
+var projects = [
+  {
+    url: require("../assets/images/stock/project_1.png"),
+    name: "Partizipationstool",
+    customer: "Landkreis Birkenfeld"
+  },
+  {
+    url: require("../assets/images/stock/project_2.png"),
+    name: "Buchungsassistenten",
+    customer: "Sparkasse-Rhein Nahe"
+  },
+  {
+    url: require("../assets/images/stock/project_3.png"),
+    name: "Filialfinder",
+    customer: "Gillen - Der Bäcker"
+  },
+  {
+    url: require("../assets/images/stock/project_4.png"),
+    name: "Steuerberater Seite",
+    customer: "Steuerberater Daniel Heeb"
+  }
+];
+
 @Component
-export default class Projects extends Vue {}
+export default class Projects extends Vue {
+  // @Prop() private msg!: string;
+  data() {
+    return {
+      projects: projects
+    };
+  }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -53,9 +83,7 @@ export default class Projects extends Vue {}
 #projects-wrapper {
   display: flex;
 }
-.projects-item {
-  flex: 1;
-}
+
 .projects-row {
   display: flex;
 }
@@ -64,21 +92,91 @@ export default class Projects extends Vue {}
 }
 #projects-items {
   flex: 1;
-}
-.projects-image-wrapper {
-  width: 100%;
-  img {
-    position: relative;
-    width: 100%;
-  }
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 }
 .projects-item {
   position: relative;
+  width: 45%;
+  margin-bottom: 2%;
+  display: block;
+  // flex-direction: column;
+  // justify-content: center;
+
+  .projects-image-wrapper {
+    width: 100%;
+    height: 100%;
+
+    img {
+      position: relative;
+      width: 100%;
+      left: 50%;
+      top: 50%;
+      // transform: translateX(-50%);
+      transform: translate3d(-50%, -50%, 0);
+
+      transition: all 0.5s;
+    }
+    &:hover {
+      img {
+        width: 75%;
+      }
+    }
+  }
+  .projects-name {
+    position: absolute;
+    top: 20%;
+    left: 0;
+    z-index: 20;
+    opacity: 0;
+    transition: all 0.5s;
+  }
+  .projects-customer {
+    position: absolute;
+    bottom: 20%;
+    right: 0;
+    z-index: 20;
+    opacity: 0;
+    transition: all 0.5s;
+  }
+  &:hover {
+    .projects-name,
+    .projects-customer {
+      opacity: 1;
+    }
+  }
 }
-.projects-name {
-  position: absolute;
-}
-.projects-customer {
-  position: absolute;
+.projects-slider-wrapper {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  top: 0;
+  .projects-slider {
+    top: 50%;
+    position: relative;
+    transform: translateY(-50%);
+    display: flex;
+  }
+  .projects-slider-items {
+    flex-grow: 1;
+  }
+  .slider-arrows {
+    padding: 70px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    img {
+      width: 25px;
+    }
+  }
+  .projects-slider-item-wrapper {
+    height: 50vh;
+    display: none;
+    &:first-child {
+      display: block;
+    }
+  }
 }
 </style>
